@@ -8,6 +8,7 @@ django = "*"
 python-dotenv = "*"
 djangorestframework = "*"
 mysqlclient = "*"
+pyjwt = "*"
 
 [dev-packages]
 autopep8 = "*"
