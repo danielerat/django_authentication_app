@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework.authentication import get_authorization_header
-from core.authentication import JWTAuthentication, create_access_token, create_refresh_token, decode_access_token
+from core.authentication import JWTAuthentication, create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 from core.serializers import UserSerializer
 from core.models import User
@@ -52,3 +52,17 @@ class UserAPIView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+
+class RefreshAPIView(APIView):
+    def post(self, request):
+        # Get the token from the cookie
+        refresh_token = request.COOKIES.get('refresh_token')
+        print(refresh_token)
+        print(refresh_token)
+        id = decode_refresh_token(refresh_token)
+        access_token = create_access_token(1)
+
+        return Response({
+            'token': access_token
+        })

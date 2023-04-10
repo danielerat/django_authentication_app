@@ -7,15 +7,6 @@ from core.models import User
 from core.serializers import UserSerializer
 
 
-def decode_access_token(token):
-    try:
-        payload = jwt.decode(token, 'access_secret', algorithms='HS256')
-        return payload['user_id']
-    except Exception as e:
-
-        raise exceptions.AuthenticationFailed("Unauthenticated")
-
-
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
@@ -24,6 +15,24 @@ class JWTAuthentication(BaseAuthentication):
             id = decode_access_token(token)
             user = User.objects.get(pk=id)
             return (user, None)
+        raise exceptions.AuthenticationFailed("Unauthenticated")
+
+
+def decode_access_token(token):
+    try:
+        payload = jwt.decode(token, 'access_secret', algorithms='HS256')
+        return payload['user_id']
+    except:
+
+        raise exceptions.AuthenticationFailed("Unauthenticated")
+
+
+def decode_refresh_token(token):
+    try:
+        payload = jwt.decode(token, 'refresh_secret', algorithms='HS256')
+        return payload['user_id']
+    except:
+
         raise exceptions.AuthenticationFailed("Unauthenticated")
 
 
@@ -43,5 +52,5 @@ def create_refresh_token(id):
             'user_id': id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7),
             'iat': datetime.datetime.utcnow()
-        }, 'access_secret', algorithm='HS256'
+        }, 'refresh_secret', algorithm='HS256'
     )
