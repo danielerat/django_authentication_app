@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 python-dotenv = "*"
 djangorestframework = "*"
+mysqlclient = "*"
 
 [dev-packages]
 autopep8 = "*"
